@@ -1,0 +1,9 @@
+﻿@model MichaFinancialGroup.ViewModels.CustomerTransactionsViewModel.TransactionsLoadTransactionsViewModel
+
+@{ Layout = null; }
+
+
+@foreach (var t in Model.Transactions)
+{
+<partial name="_TransactionRow" model="@t" />
+}

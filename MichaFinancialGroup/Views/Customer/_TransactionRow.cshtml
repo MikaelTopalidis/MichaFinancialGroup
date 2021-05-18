@@ -1,0 +1,17 @@
+﻿@model MichaFinancialGroup.ViewModels.CustomerTransactionsViewModel.TransactionsViewModel
+
+@{ Layout = null; }
+
+
+<tr class="clickable-row">
+    <td>@Model.Date.ToString("yyyy-MM-dd")</td>
+    <td>@Model.TransactionId</td>
+    <td>@Model.AccountId</td>
+    <td>@Model.Account</td>
+    <td>@Model.Amount</td>
+    <td>@Model.Bank</td>
+    <td>@Model.Operation</td>
+    <td>@Model.Symbol</td>
+    <td>@Model.Type</td>
+    <td>@Model.Balance</td>
+</tr>

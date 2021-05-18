@@ -1,0 +1,87 @@
+﻿@model MichaFinancialGroup.ViewModels.Transactions.TransactionIndexViewModel
+
+@{
+    ViewData["Title"] = "Transactions";
+}
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-primary">
+                        <h4 class="card-title ">Customers</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="">
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Transaction Id</th>
+                                        <th>Account Id</th>
+                                        <th>Account</th>
+                                        <th>Amount</th>
+                                        <th>Bank</th>
+                                        <th>Operation</th>
+                                        <th>Symbol</th>
+                                        <th>Type</th>
+                                        <th>Balance</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var transactions in Model.Transactions)
+                                    {
+                                        <tr>
+                                            <td>@transactions.Date.ToString("yyyy-MM-dd")</td>
+                                            <td>@transactions.TransactionId</td>
+                                            <td>@transactions.AccountId</td>
+                                            <td>@transactions.Account</td>
+                                            <td>@transactions.Amount</td>
+                                            <td>@transactions.Bank</td>
+                                            <td>@transactions.Operation</td>
+                                            <td>@transactions.Symbol</td>
+                                            <td>@transactions.Type</td>
+                                            <td>@transactions.Balance</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td>
+                                            @if (Model.Page > 1)
+                                            {
+                                                <a class="btn btn-primary"
+                                                   asp-controller="Transactions"
+                                                   asp-action="Index"
+                                                   asp-route-sortField="@Model.SortField"
+                                                   asp-route-sortOrder="@Model.SortOrder"
+                                                   asp-route-page="@(Model.Page - 1)">
+                                                    Prev
+                                                </a>
+
+                                            }
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>
+                                            <a class="btn btn-primary"
+                                               asp-controller="Transactions"
+                                               asp-action="Index"
+                                               asp-route-sortField="@Model.SortField"
+                                               asp-route-sortOrder="@Model.SortOrder"
+                                               asp-route-page="@(Model.Page + 1)">
+                                                Next
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

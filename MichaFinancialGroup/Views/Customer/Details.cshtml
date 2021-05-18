@@ -1,0 +1,127 @@
+﻿@model MichaFinancialGroup.ViewModels.CustomerDetailsViewModel
+
+@{
+    ViewData["Title"] = "Customers Details";
+
+    var accountid = Model.Dispositions.Select(a => a.Account.AccountId);
+}
+
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-6 ">
+                <div class="card card-profile">
+                    <div class="card-avatar">
+                        <a href="#pablo">
+                            <img class="img" src="~/img/faces/marc.jpg" />
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <h6 class="card-category">Customer at MFB</h6>
+                         <h4 class="card-title">@Model.Givenname @Model.Surname</h4>
+                        <p class="card-description">
+                            Don't be scared of the truth because we need to restart the human foundation in truth And I love you like Kanye loves Kanye I love Rick Owens’ bed design but the back is...
+                        </p>
+                        @foreach (var d in Model.Dispositions)
+                        {
+                            <a asp-controller="Transactions" asp-action="New" asp-route-id="@d.Account.AccountId" class="btn btn-primary btn-round">New transaction for account.nr: @d.Account.AccountId </a>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header card-header-primary">
+                            <h4 class="card-title ">Customer Profile</h4>
+                        </div>
+                        <div class="card-body text-white">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="">
+                                        <tr>
+                                            <th>Id</th>
+                                            <th style="color: white !important;">Total Balance</th>
+                                            <th style="color: white !important;">Social security Number</th>
+                                            <th style="color: white !important;">Gender</th>
+                                            <th style="color: white !important;">Birthday</th>
+                                            <th style="color: white !important;">Name</th>
+                                            <th style="color: white !important;">Street Address</th>
+                                            <th style="color: white !important;">Zipcode</th>
+                                            <th style="color: white !important;">City</th>
+                                            <th style="color: white !important;">Countrycode</th>
+                                            <th style="color: white !important;">Country</th>
+                                            <th style="color: white !important;">Emailaddress</th>
+                                            <th style="color: white !important;">Telephonecountrycode</th>
+                                            <th style="color: white !important;">Telephonenumber</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                            <tr>
+                                                <td>@Model.CustomerId</td>
+                                                <td>@Model.TotalBalance</td>
+                                                <td>@Model.NationalId</td>
+                                                <td>@Model.Gender</td>
+                                                <td>@Model.Birthday.ToString("yyyy-MM-dd")</td>
+                                                <td>@Model.Givenname @Model.Surname</td>
+                                                <td>@Model.Streetaddress</td>
+                                                <td>@Model.Zipcode</td>
+                                                <td>@Model.City</td>
+                                                <td>@Model.CountryCode</td>
+                                                <td>@Model.Country</td>
+                                                <td>@Model.Emailaddress</td>
+                                                <td>@Model.Telephonecountrycode</td>
+                                                <td>@Model.Telephonenumber</td>
+                                            </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card">
+                                        <div class="card-header card-header-primary">
+                                            <h4 class="card-title ">Customer Accounts</h4>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                <table class="table table-hover">
+                                                    <thead class="">
+                                                        <tr>
+                                                            <th style="color: white !important;">Id</th>
+                                                            <th style="color: white !important;">Type</th>
+                                                            <th style="color: white !important;">Balance</th>
+                                                            <th style="color: white !important;">Created</th>
+                                                            <th style="color: white !important;">Frequency</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach (var disposition in Model.Dispositions)
+                                                        {
+                                                            <tr class="clickable-row" data-href="/customer/transactions/@disposition.Account.AccountId/">
+                                                                <td>@disposition.Account.AccountId</td>
+                                                                <td>@disposition.Account.Type</td>
+                                                                <td>@disposition.Account.Balance</td>
+                                                                <td>@disposition.Account.Created.ToString("yyy-MM-dd")</td>
+                                                                <td>@disposition.Account.Frequency</td>
+                                                            </tr>
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

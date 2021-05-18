@@ -1,0 +1,51 @@
+﻿@model MichaFinancialGroup.ViewModels.User.UserIndexViewModel
+
+@{
+    ViewData["Title"] = "Users";
+}
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-primary">
+                        <h4 class="card-title ">Users</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="">
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Username</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var user in Model.Users)
+                                    {
+                                        <tr class="clickable-row" data-href="/User/Edit/@user.Id">
+                                            <td>@user.Id</td>
+                                            <td>@user.Username</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td>
+                                            <a class="btn btn-primary"
+                                               asp-controller="User"
+                                               asp-action="New">
+                                                New User
+                                            </a>
+                                        </td>
+                                        </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

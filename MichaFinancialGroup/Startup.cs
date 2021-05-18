@@ -1,5 +1,6 @@
 using MichaFinancialGroup.Data;
 using MichaFinancialGroup.Models;
+using MichaFinancialGroup.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -28,10 +29,16 @@ namespace MichaFinancialGroup
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<ICustomerRepository, CustomerRepository>();
+            services.AddTransient<IStatistics, Statistics>();
+            services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<ITransactionsRepository, TransactionsRepository>();
+
             services.AddDbContext<BankAppDataContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<BankAppDataContext>();
             services.AddControllersWithViews();
             services.AddRazorPages();

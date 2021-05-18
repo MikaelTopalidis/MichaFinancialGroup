@@ -1,0 +1,137 @@
+﻿@model MichaFinancialGroup.ViewModels.CustomerIndexViewModel
+
+@{
+    ViewData["Title"] = "Customer list";
+}
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-primary">
+                        <h4 class="card-title ">Customers</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="">
+                                    <tr>
+                                        <th>Id</th>
+                                        <th scope="col">
+                                            <a asp-controller="Customer"
+                                               asp-action="Index"
+                                               asp-route-sortField="ssn"
+                                               asp-route-sortOrder="@(Model.SortField == "ssn" ? Model.OppositeSortOrder : "" )"
+                                               asp-route-q="@Model.q">
+                                                social security number
+                                                @if (Model.SortField == "ssn")
+                                                {
+                                                    if (Model.SortOrder == "asc")
+                                                    {
+                                                        <i class="fas fa-sort-down"></i> }
+                                                    else
+                                                    {
+                                                        <i class="fas fa-sort-up"></i>}
+
+                                                }
+
+                                            </a>
+                                        </th>
+                                        <th scope="col">
+                                            <a asp-controller="Customer"
+                                               asp-action="Index"
+                                               asp-route-sortField="Name"
+                                               asp-route-sortOrder="@(Model.SortField == "Name" ? Model.OppositeSortOrder : "" )"
+                                               asp-route-q="@Model.q">
+                                                Name
+                                                @if (Model.SortField == "Name")
+                                                {
+                                                    if (Model.SortOrder == "asc")
+                                                    {
+                                                        <i class="fas fa-sort-down"></i> }
+                                                    else
+                                                    {
+                                                        <i class="fas fa-sort-up"></i>}
+
+                                                }
+
+                                            </a>
+                                        </th>
+                                        <th scope="col">
+                                            <a asp-controller="Customer"
+                                               asp-action="Index"
+                                               asp-route-sortField="Address"
+                                               asp-route-sortOrder="@(Model.SortField == "Address" ? Model.OppositeSortOrder : "" )"
+                                               asp-route-q="@Model.q">
+                                                Address
+                                                @if (Model.SortField == "Address")
+                                                {
+                                                    if (Model.SortOrder == "asc")
+                                                    {
+                                                        <i class="fas fa-sort-down"></i> }
+                                                    else
+                                                    {
+                                                        <i class="fas fa-sort-up"></i>}
+
+                                                }
+
+                                            </a>
+                                        </th>
+                                        <th>City</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var customer in Model.Customers)
+                                    {
+                                        <tr class="clickable-row" data-href="/customer/details/@customer.CustomerId">
+                                            <td>@customer.CustomerId</td>
+                                            <td>@customer.PersonalNumber</td>
+                                            <td>@customer.FullName</td>
+                                            <td>@customer.Address</td>
+                                            <td>@customer.City</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+
+                                        <td>
+                                            @if (Model.Page > 1)
+                                            {
+                                                <a class="btn btn-primary"
+                                                   asp-controller="Customer"
+                                                   asp-action="Index"
+                                                   asp-route-sortField="@Model.SortField"
+                                                   asp-route-sortOrder="@Model.SortOrder"
+                                                   asp-route-page="@(Model.Page - 1)"
+                                                   asp-route-q="@Model.q">
+                                                    Prev
+                                                </a>
+
+                                            }
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>
+                                            <a class="btn btn-primary"
+                                               asp-controller="Customer"
+                                               asp-action="Index"
+                                               asp-route-sortField="@Model.SortField"
+                                               asp-route-sortOrder="@Model.SortOrder"
+                                               asp-route-page="@(Model.Page + 1)"
+                                               asp-route-q="@Model.q">
+                                                Next
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
