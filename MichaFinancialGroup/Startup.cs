@@ -1,19 +1,12 @@
-using MichaFinancialGroup.Data;
-using MichaFinancialGroup.Models;
 using MichaFinancialGroup.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using SharedLibrary.data;
 
 namespace MichaFinancialGroup
 {
@@ -33,6 +26,7 @@ namespace MichaFinancialGroup
             services.AddTransient<IStatistics, Statistics>();
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<ITransactionsRepository, TransactionsRepository>();
+            services.AddTransient<IAccountsRepository, AccountsRepository>();
 
             services.AddDbContext<BankAppDataContext>(options =>
                 options.UseSqlServer(
@@ -65,6 +59,7 @@ namespace MichaFinancialGroup
 
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseResponseCaching();
 
             app.UseEndpoints(endpoints =>
             {

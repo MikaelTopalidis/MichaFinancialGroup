@@ -1,4 +1,5 @@
 ﻿using MichaFinancialGroup.Models;
+using SharedLibrary.data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +8,8 @@ namespace MichaFinancialGroup.Services
 {
     public interface ITransactionsRepository
     {
-        public IEnumerable<Transactions> GetAll();
+        public IQueryable<Transactions> GetAll();
+        public IQueryable<Transactions> GetTransactionsForChart();
+        public IQueryable<DateTime> GetTransactionDatesForChart();
     }
 }

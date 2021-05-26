@@ -1,4 +1,5 @@
 ﻿using MichaFinancialGroup.Models;
+using SharedLibrary.data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,6 @@ namespace MichaFinancialGroup.Services
 {
     public interface IStatistics
     {
-        public IEnumerable<Dispositions> GetAll();
+        public IQueryable<Dispositions> GetAll();
     }
 }

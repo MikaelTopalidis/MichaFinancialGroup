@@ -1,13 +1,16 @@
 ﻿@model MichaFinancialGroup.ViewModels.CustomerIndexViewModel
 
 @{
-    ViewData["Title"] = "Customer list";
+    ViewData["Title"] = "Customer List";
 }
 
 <div class="content">
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
+                <div class="text-sm-left">
+                    <a asp-controller="Customer" asp-action="New" class="btn btn-primary btn-round">New Customer</a>
+                </div>
                 <div class="card">
                     <div class="card-header card-header-primary">
                         <h4 class="card-title ">Customers</h4>
@@ -17,15 +20,34 @@
                             <table class="table table-hover">
                                 <thead class="">
                                     <tr>
-                                        <th>Id</th>
                                         <th scope="col">
                                             <a asp-controller="Customer"
                                                asp-action="Index"
-                                               asp-route-sortField="ssn"
-                                               asp-route-sortOrder="@(Model.SortField == "ssn" ? Model.OppositeSortOrder : "" )"
+                                               asp-route-sortField="Id"
+                                               asp-route-sortOrder="@(Model.SortField == "Id" ? Model.OppositeSortOrder : "" )"
                                                asp-route-q="@Model.q">
-                                                social security number
-                                                @if (Model.SortField == "ssn")
+                                                Id
+                                                @if (Model.SortField == "Id")
+                                                {
+                                                    if (Model.SortOrder == "asc")
+                                                    {
+                                                        <i class="fas fa-sort-down"></i> }
+                                                    else
+                                                    {
+                                                        <i class="fas fa-sort-up"></i>}
+
+                                                }
+
+                                            </a>
+                                        </th>
+                                        <th scope="col">
+                                            <a asp-controller="Customer"
+                                               asp-action="Index"
+                                               asp-route-sortField="PersonalNumber"
+                                               asp-route-sortOrder="@(Model.SortField == "PersonalNumber" ? Model.OppositeSortOrder : "" )"
+                                               asp-route-q="@Model.q">
+                                                Personal Number
+                                                @if (Model.SortField == "PersonalNumber")
                                                 {
                                                     if (Model.SortOrder == "asc")
                                                     {
@@ -78,7 +100,26 @@
 
                                             </a>
                                         </th>
-                                        <th>City</th>
+                                        <th scope="col">
+                                            <a asp-controller="Customer"
+                                               asp-action="Index"
+                                               asp-route-sortField="City"
+                                               asp-route-sortOrder="@(Model.SortField == "City" ? Model.OppositeSortOrder : "" )"
+                                               asp-route-q="@Model.q">
+                                                City
+                                                @if (Model.SortField == "City")
+                                                {
+                                                    if (Model.SortOrder == "asc")
+                                                    {
+                                                        <i class="fas fa-sort-down"></i> }
+                                                    else
+                                                    {
+                                                        <i class="fas fa-sort-up"></i>}
+
+                                                }
+
+                                            </a>
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>

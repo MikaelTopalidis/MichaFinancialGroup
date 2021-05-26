@@ -1,5 +1,4 @@
-﻿using MichaFinancialGroup.Models;
-using MichaFinancialGroup.Services;
+﻿using MichaFinancialGroup.Services;
 using MichaFinancialGroup.ViewModels;
 using MichaFinancialGroup.ViewModels.Transactions;
 using Microsoft.AspNetCore.Authorization;
@@ -8,20 +7,19 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Transactions;
 
 namespace MichaFinancialGroup.Controllers
 {
     public class TransactionsController : Controller
     {
         private readonly ITransactionsRepository _transactionsRepository;
-        private readonly BankAppDataContext _dbContext;
-        public TransactionsController(ITransactionsRepository transactionsRepository, BankAppDataContext dbContext)
+        private readonly IAccountsRepository _accountsRepository;
+        public TransactionsController(ITransactionsRepository transactionsRepository, IAccountsRepository accountsRepository)
         {
             _transactionsRepository = transactionsRepository;
-            _dbContext = dbContext;
+            _accountsRepository = accountsRepository;
         }
+        [Authorize(Roles = "Admin, Cashier")]
         public IActionResult Index(string sortField, string sortOrder, int page = 1)
         {
             var viewModel = new TransactionIndexViewModel();
@@ -81,15 +79,14 @@ namespace MichaFinancialGroup.Controllers
             return View(viewModel);
         }
 
+        [Authorize(Roles = "Admin, Cashier")]
         public IActionResult New(int id)
         {
-
             var viewModel = new TransactionNewViewModel();
             viewModel.Operations = GetOperationListItems();
-            viewModel.Type = GetTypeListItems();
             viewModel.AccountId = id;
-            var acc = _dbContext.Accounts.Where(a => a.AccountId == id).FirstOrDefault();
-            viewModel.CurrentBalance = acc.Balance; 
+            var acc = _accountsRepository.GetAccountById(id);
+            viewModel.CurrentBalance = acc.Balance;
 
             return View(viewModel);
         }
@@ -97,33 +94,54 @@ namespace MichaFinancialGroup.Controllers
         [HttpPost]
         public IActionResult New(TransactionNewViewModel viewModel)
         {
+            if (!_accountsRepository.CheckIfSufficientBalance(viewModel.Amount, viewModel.CurrentBalance))
+            {
+                ModelState.AddModelError("Amount", "Insufficient funds. \n Amount cannot be greater than Balance");
+            }
+            if ( viewModel.selectedOperation == "Transfer to Another account" && _accountsRepository.GetAccountById(viewModel.ToAccountId) == null)
+            {
+                ModelState.AddModelError("ToAccountId", "Please enter a valid Account Id");
+            }
+
+            if (viewModel.AccountId == viewModel.ToAccountId)
+            {
+                ModelState.AddModelError("ToAccountId", "To Account can not be equal to Current Account");
+            }
 
             if (ModelState.IsValid)
             {
-    
-                var receiver = _dbContext.Accounts.Where(a => a.AccountId == viewModel.ToAccountId).FirstOrDefault();
-                var sender = _dbContext.Accounts.Where(a => a.AccountId == viewModel.AccountId).FirstOrDefault();
-                receiver.Balance += viewModel.Amount;
-                sender.Balance -= viewModel.Amount;
 
-                var dbTransact = new Transactions();
-                dbTransact.Balance = viewModel.CurrentBalance - viewModel.Amount;
-                dbTransact.Bank = viewModel.Bank;
-                dbTransact.Date = DateTime.Now;
-                dbTransact.Amount = viewModel.Amount;
-                dbTransact.AccountId = viewModel.AccountId;
-                dbTransact.Account = viewModel.Account;
-                dbTransact.Symbol = viewModel.Symbol;
-                dbTransact.Type = viewModel.selectedType;
-                dbTransact.Operation = viewModel.selectedOperation;
-                
-                _dbContext.Transactions.Add(dbTransact);
-                
-                
-                _dbContext.SaveChanges();
-                return RedirectToAction("New", new { id = viewModel.AccountId, CurrentBalance = dbTransact.Balance });
+                switch (viewModel.selectedOperation)
+                {
+                    case "Withdrawal in Cash":
+                        _accountsRepository.Withdrawal(viewModel.AccountId, viewModel.Amount);
+                        break;
+                    case "Credit Card Withdrawal":
+                        _accountsRepository.Withdrawal(viewModel.AccountId, viewModel.Amount);
+                        break;
+                    case "Collection From Another Bank":
+                        _accountsRepository.Withdrawal(viewModel.AccountId, viewModel.Amount);
+                        break;
+                    case "Remittance to Another Bank":
+                        _accountsRepository.Withdrawal(viewModel.AccountId, viewModel.Amount);
+                        break;
+                    case "Credit In Cash":
+                        _accountsRepository.Deposit(viewModel.AccountId, viewModel.Amount);
+                        break;
+                    case "Credit":
+                        _accountsRepository.Deposit(viewModel.AccountId, viewModel.Amount);
+                        break;
+                    case "Transfer to Another account":
+                        _accountsRepository.Transfer(viewModel.AccountId, viewModel.ToAccountId, viewModel.Amount);
+                        break;
+                }
+                _accountsRepository.NewTransaction(viewModel);
+
+
+                return RedirectToAction("New", new { id = viewModel.AccountId, CurrentBalance = viewModel.CurrentBalance });
+
             }
-
+            viewModel.Operations = GetOperationListItems();
             return View(viewModel);
         }
 
@@ -136,20 +154,12 @@ namespace MichaFinancialGroup.Controllers
             list.Add(new SelectListItem { Value = "Credit", Text = "Credit" });
             list.Add(new SelectListItem { Value = "Remittance to Another Bank", Text = "Remittance to Another Bank" });
             list.Add(new SelectListItem { Value = "Withdrawal in Cash", Text = "Withdrawal in Cash" });
+            list.Add(new SelectListItem { Value = "Credit Card Withdrawal", Text = "Credit Card Withdrawal" });
+            list.Add(new SelectListItem { Value = "Transfer to Another account", Text = "Transfer to Another account" });
 
-          
-            return list;
-        } 
-        
-        private List<SelectListItem> GetTypeListItems()
-        {
-            var list = new List<SelectListItem>();
-            list.Add(new SelectListItem { Value = "0", Text = "Choose Transaction Type" });
-            list.Add(new SelectListItem { Value = "Debit", Text = "Debit" });
-            list.Add(new SelectListItem { Value = "Credit", Text = "Credit" });
 
-          
             return list;
         }
+
     }
 }

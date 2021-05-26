@@ -11,7 +11,7 @@
                 <div class="card">
                     <div class="card-header card-header-primary">
                         <h4 class="card-title">Transaction</h4>
-                        <p class="card-category">Managing transactions for .....</p>
+                        <p class="card-category">Managing transactions for AccountId: @Model.AccountId</p>
                     </div>
                     <div class="card-body">
                         <form method="post" asp-controller="Transactions" asp-action="New">
@@ -19,18 +19,9 @@
                                 <div class="col-md-5">
                                     <div class="form-group">
                                         <label class="bmd-label-floating">Operation of choice</label>
-                                        <select class="form-control" style="background-color: #282c44 !important;"
-                                                asp-for="@Model.selectedOperation"
-                                                asp-items="@Model.Operations"></select>
-                                    </div>
-                                </div>
-                                <div class="col-md-5">
-                                    <div class="form-group">
-                                        <label class="bmd-label-floating">Type</label>
-                                        <select class="form-control" style="background-color: #282c44 !important;"
-                                                asp-for="@Model.selectedType"
-                                         asp-items="@Model.Type">
-                                        </select>
+                                        <select id="selectedOperation" onchange="UpdateToAccountInput()" asp-for="selectedOperation"
+                                                asp-items="@Model.Operations" class="form-control" style="background-color: #282c44 !important;"></select>
+                                        <span style="color : red" asp-validation-for="@Model.selectedOperation" class="field-validation-error"></span>
                                     </div>
                                 </div>
                             </div>
@@ -38,13 +29,15 @@
                                 <div class="col-md-5">
                                     <div class="form-group">
                                         <label class="bmd-label-floating">Current Account</label>
-                                        <input  style="color: grey" asp-for="@Model.AccountId" value="@Model.AccountId"  readonly type="number" class="form-control">
+                                        <input style="color: grey" asp-for="@Model.AccountId" value="@Model.AccountId" readonly type="number" class="form-control">
+                                        <span style="color : red" asp-validation-for="@Model.AccountId" class="field-validation-error"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-5">
                                     <div class="form-group">
                                         <label class="bmd-label-floating">Current Balance</label>
                                         <input style="color: grey" asp-for="@Model.CurrentBalance" value="@Model.CurrentBalance" readonly class="form-control">
+                                        <span style="color : red" asp-validation-for="@Model.CurrentBalance" class="field-validation-error"></span>
                                     </div>
                                 </div>
                             </div>
@@ -52,13 +45,15 @@
                                 <div class="col-md-5">
                                     <div class="form-group">
                                         <label class="bmd-label-floating">To Account</label>
-                                        <input type="text" asp-for="@Model.ToAccountId" class="form-control">
+                                        <input id="ToAccountInput" type="text" asp-for="@Model.ToAccountId" class="form-control">
+                                        <span style="color : red" asp-validation-for="@Model.ToAccountId" class="field-validation-error"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-5">
                                     <div class="form-group">
                                         <label class="bmd-label-floating">Amount</label>
                                         <input type="number" step=".01" asp-for="@Model.Amount" class="form-control">
+                                        <span style="color : red" asp-validation-for="@Model.Amount" class="field-validation-error"></span>
                                     </div>
                                 </div>
                             </div>
@@ -68,23 +63,20 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card card-profile">
-                    <div class="card-avatar">
-                        <a href="#pablo">
-                            <img class="img" src="../assets/img/faces/marc.jpg" />
-                        </a>
-                    </div>
-                    <div class="card-body">
-                        <h6 class="card-category">CEO / Co-Founder</h6>
-                        <h4 class="card-title">Alec Thompson</h4>
-                        <p class="card-description">
-                            Don't be scared of the truth because we need to restart the human foundation in truth And I love you like Kanye loves Kanye I love Rick Owens’ bed design but the back is...
-                        </p>
-                        <a href="#pablo" class="btn btn-primary btn-round">Follow</a>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </div>
+@section scripts{
+
+    <script>
+        function UpdateToAccountInput() {
+            selectedOperation = $("#selectedOperation :selected").val();
+
+            if (selectedOperation == "Transfer to Another account") {
+                $("#ToAccountInput").removeAttr("disabled");
+                return;
+            }
+            $("#ToAccountInput").attr("disabled", "disabled").val(null);
+        }
+    </script>
+}

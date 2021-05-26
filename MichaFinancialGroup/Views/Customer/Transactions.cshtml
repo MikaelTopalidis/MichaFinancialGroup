@@ -50,23 +50,21 @@
                                     @foreach (var transactions in Model.Transactions)
                                     {
                                         <partial name="_TransactionRow" model="@transactions" />
-
- 
                                     }
                                 </tbody>
-                             
+
                             </table>
                             <a class="btn btn-primary" onclick="fetch20more(); return false;">Load 20 more</a>
 
                             @section Scripts
                             {
-                                                        <script>
+                                <script>
                                     var skip = 0;
                                     function fetch20more() {
-                                        //$("#players").append('<li>En till</li>');
+
 
                                         skip = skip + 20;
-                                        //$("#players").append('<li>' + skip + '</li>');
+
 
                                         $.ajax({
                                             url: "/customer/loadtransactions/@Model.CustomerId?skip=" + skip, success: function (result) {

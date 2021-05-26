@@ -13,28 +13,30 @@ namespace MichaFinancialGroup.ViewModels
     {
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            //Amount
+            if (selectedOperation == "0")
+            {
+                yield return new ValidationResult("Please select an operation",
+                    new[] { nameof(selectedOperation) });
+            }
+
             if (selectedOperation != "Credit in Cash" && Amount > CurrentBalance)
                 yield return new ValidationResult(
                     "Insufficient funds. \n Amount cannot be greater than Balance.",
                     new[] { nameof(Amount) });
 
-            if (Amount < 1 || Amount > 10000)
+            if (Amount < 1)
                 yield return new ValidationResult(
-                   "Minimum transaction in 1 USD, maximum is 10 000 USD",
+                   "Minimum transaction in 1 USD",
                    new[] { nameof(Amount) });
-            //Amount
-
-            //Account
-            if ((selectedOperation == "Remittance to Another Bank"
-            || selectedOperation == "Transfer to Another account") && (ToAccountId <= 0 || ToAccountId.ToString().Length < 1))
+ 
+            if ((selectedOperation == "Transfer to Another account") && (ToAccountId <= 0 || ToAccountId.ToString().Length < 1))
             {
                 yield return new ValidationResult("Recieving account is required with specific transactiontype selected",
                     new[] { nameof(Account) });
             }
-            //Account
+
         }
-        public string test { get; set; }
+
         public int TransactionId { get; set; }
 
         [Required]
@@ -42,10 +44,6 @@ namespace MichaFinancialGroup.ViewModels
 
         public int ToAccountId { get; set; }
         public DateTime Date { get; set; }
-        public List<SelectListItem> Type { get; set; }
-
-        [Required]
-        public string selectedType { get; set; }
         public List<SelectListItem> Operations { get; set; }
 
         [Required]
@@ -53,6 +51,7 @@ namespace MichaFinancialGroup.ViewModels
 
         [Required]
         public decimal Amount { get; set; }
+        [Required]
         public decimal CurrentBalance { get; set; }
         public string Symbol { get; set; }
         public string Bank { get; set; }

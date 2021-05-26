@@ -19,7 +19,7 @@
                     </div>
                     <div class="card-body">
                         <h6 class="card-category">Customer at MFB</h6>
-                         <h4 class="card-title">@Model.Givenname @Model.Surname</h4>
+                        <h4 class="card-title">@Model.Givenname @Model.Surname</h4>
                         <p class="card-description">
                             Don't be scared of the truth because we need to restart the human foundation in truth And I love you like Kanye loves Kanye I love Rick Owens’ bed design but the back is...
                         </p>
@@ -30,13 +30,18 @@
                     </div>
                 </div>
             </div>
+        </div>
+            <div class="text-center">
+                <a asp-controller="Customer" asp-action="Edit" asp-route-id="@Model.CustomerId" class="btn btn-primary btn-round">Edit Customer</a>
+                <a asp-controller="Customer" asp-action="NewAccount" asp-route-id="@Model.CustomerId" class="btn btn-primary btn-round">New Account</a>
+            </div>
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header card-header-primary">
                             <h4 class="card-title ">Customer Profile</h4>
                         </div>
-                        <div class="card-body text-white">
+                        <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-hover">
                                     <thead class="">
@@ -58,28 +63,27 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                            <tr>
-                                                <td>@Model.CustomerId</td>
-                                                <td>@Model.TotalBalance</td>
-                                                <td>@Model.NationalId</td>
-                                                <td>@Model.Gender</td>
-                                                <td>@Model.Birthday.ToString("yyyy-MM-dd")</td>
-                                                <td>@Model.Givenname @Model.Surname</td>
-                                                <td>@Model.Streetaddress</td>
-                                                <td>@Model.Zipcode</td>
-                                                <td>@Model.City</td>
-                                                <td>@Model.CountryCode</td>
-                                                <td>@Model.Country</td>
-                                                <td>@Model.Emailaddress</td>
-                                                <td>@Model.Telephonecountrycode</td>
-                                                <td>@Model.Telephonenumber</td>
-                                            </tr>
+                                        <tr>
+                                            <td>@Model.CustomerId</td>
+                                            <td>@Model.TotalBalance</td>
+                                            <td>@Model.NationalId</td>
+                                            <td>@Model.Gender</td>
+                                            <td>@Model.Birthday.ToString("yyyy-MM-dd")</td>
+                                            <td>@Model.Givenname @Model.Surname</td>
+                                            <td>@Model.Streetaddress</td>
+                                            <td>@Model.Zipcode</td>
+                                            <td>@Model.City</td>
+                                            <td>@Model.CountryCode</td>
+                                            <td>@Model.Country</td>
+                                            <td>@Model.Emailaddress</td>
+                                            <td>@Model.Telephonecountrycode</td>
+                                            <td>@Model.Telephonenumber</td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
-
                     <div class="content">
                         <div class="container-fluid">
                             <div class="row">
@@ -107,7 +111,7 @@
                                                                 <td>@disposition.Account.AccountId</td>
                                                                 <td>@disposition.Account.Type</td>
                                                                 <td>@disposition.Account.Balance</td>
-                                                                <td>@disposition.Account.Created.ToString("yyy-MM-dd")</td>
+                                                                <td>@disposition.Account.Created.ToString("yyyy-MM-dd")</td>
                                                                 <td>@disposition.Account.Frequency</td>
                                                             </tr>
                                                         }
@@ -122,6 +126,5 @@
                     </div>
                 </div>
             </div>
-        </div>
     </div>
 </div>

@@ -7,6 +7,7 @@ namespace MichaFinancialGroup.ViewModels.Customer
 {
     public class CustomerTopTenViewModel
     {
+        public string Country { get; set; }
         public List<TopTenViewModel> Customers { get; set; } = new List<TopTenViewModel>();
         public class TopTenViewModel
         {

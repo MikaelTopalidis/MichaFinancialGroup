@@ -1,9 +1,11 @@
 ﻿using MichaFinancialGroup.Models;
 using MichaFinancialGroup.Services;
 using MichaFinancialGroup.ViewModels.User;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using SharedLibrary.data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,10 +27,10 @@ namespace MichaFinancialGroup.Controllers
             _userRepository = userRepository;
             _dbcontext = dbcontext;
         }
+        [Authorize(Roles = "Admin, Cashier")]
         public IActionResult Index(string sorting)
         {
             var viewModel = new UserIndexViewModel();
-
 
             viewModel.Users = _userRepository.GetUsers()
                 .Select(dbcat => new UserIndexViewModel.UserViewModel
@@ -37,22 +39,10 @@ namespace MichaFinancialGroup.Controllers
                     Username = dbcat.UserName
                 }).ToList();
 
-            viewModel.SortTable = string.IsNullOrEmpty(sorting) ? "Username" : "";
-
-
-
-            if (sorting == "Username")
-            {
-                viewModel.Users = viewModel.Users.OrderBy(p => p.Username).ToList();
-            }
-            else if (sorting == "")
-            {
-                viewModel.Users = viewModel.Users.OrderByDescending(p => p.Username).ToList();
-            }
-
             return View(viewModel);
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult New()
         {
             var viewModel = new UserNewViewModel();
@@ -93,6 +83,7 @@ namespace MichaFinancialGroup.Controllers
             return View(user);
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Edit(string Id)
         {
             var viewModel = new UserEditViewModel();
@@ -154,6 +145,7 @@ namespace MichaFinancialGroup.Controllers
 
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(string id)
         {
             IdentityUser user = await _userManager.FindByIdAsync(id);

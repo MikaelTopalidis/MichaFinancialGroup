@@ -1,5 +1,6 @@
 ﻿using MichaFinancialGroup.Models;
 using Microsoft.EntityFrameworkCore;
+using SharedLibrary.data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace MichaFinancialGroup.Services
             _dbContext = dbContext;
         }
 
-        public IEnumerable<Dispositions> GetAll()
+        public IQueryable<Dispositions> GetAll()
         {
             return _dbContext.Dispositions.Include(a => a.Account).Include(c => c.Customer);
 

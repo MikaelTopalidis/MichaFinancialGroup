@@ -9,6 +9,7 @@ namespace MichaFinancialGroup.ViewModels
 {
     public class HomeIndexViewModel
     {
+
         public List<StatisticsPerCountryViewModel> Statistics { get; set; } = new List<StatisticsPerCountryViewModel>();
         public decimal TotalBalance { get; set; }
         public int Customers { get; set; }

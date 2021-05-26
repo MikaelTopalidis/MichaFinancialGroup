@@ -1,5 +1,6 @@
 ﻿using MichaFinancialGroup.Models;
 using Microsoft.AspNetCore.Identity;
+using SharedLibrary.data;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -19,13 +19,18 @@ namespace MichaFinancialGroup.Controllers
             _statistics = statistics;
         }
 
-        //Du ska se antal kunder, antal konton och summan av saldot på konton.
-
-        [ResponseCache(Duration = 30)]
+        [ResponseCache(Duration = 30, Location = ResponseCacheLocation.Any)]
         public IActionResult Index()
         {
             var viewModel = new HomeIndexViewModel();
-            viewModel.Statistics = _statistics.GetAll().ToLookup(c => c.Customer.Country).Select(s => new HomeIndexViewModel.StatisticsPerCountryViewModel
+            var query = _statistics.GetAll();
+
+            viewModel.TotalBalance = query.Where(a => a.Type == "OWNER").Select(b => b.Account.Balance).Sum();
+            viewModel.Accounts = query.Where(a => a.Type == "OWNER").Select(a => a.AccountId).Distinct().Count();
+            viewModel.Customers = query.Select(c => c.CustomerId).Distinct().Count();
+            viewModel.LargestAccount = query.OrderByDescending(b => b.Account.Balance).Select(t => t.Account.Balance).FirstOrDefault();
+
+            viewModel.Statistics = query.ToLookup(c => c.Customer.Country).Select(s => new HomeIndexViewModel.StatisticsPerCountryViewModel
             {
                 Country = s.Key,
                 Customers = s.Select(c => c.CustomerId).Distinct().Count(),
@@ -34,10 +39,6 @@ namespace MichaFinancialGroup.Controllers
 
             }).OrderByDescending(b => b.TotalBalance).ToList();
 
-            viewModel.TotalBalance = _statistics.GetAll().Where(a => a.Type == "OWNER").Select(b => b.Account.Balance).Sum();
-            viewModel.Accounts = _statistics.GetAll().Where(a => a.Type == "OWNER").Select(a => a.AccountId).Distinct().Count();
-            viewModel.Customers = _statistics.GetAll().Select(c => c.CustomerId).Distinct().Count();
-            viewModel.LargestAccount = _statistics.GetAll().OrderByDescending(b => b.Account.Balance).Select(t => t.Account.Balance).FirstOrDefault();
 
             return View(viewModel);
         }
